@@ -35,6 +35,7 @@ class MainActivity : AppCompatActivity() {
         setContentView(binding.root)
         val controller = ProductEpoxyController()
         binding.epoxyRecyclerView.setController(controller)
+        controller.setData(emptyList())
         lifecycleScope.launchWhenStarted {
             val response: Response<List<NetworkProduct>> = productService.getAllProducts()
             val domainProducts: List<Product> = response.body()?.map {

@@ -71,7 +71,7 @@ dependencies {
     // Epoxy
     implementation "com.airbnb.android:epoxy:4.6.3"
 
-}
-kapt {
-    correctErrorTypes = true
+    // Facebook shimmer
+    implementation 'com.facebook.shimmer:shimmer:0.5.0'
+
 }
