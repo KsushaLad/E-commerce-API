@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.util.Log
 import androidx.core.view.isGone
 import androidx.core.view.isVisible
+import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import coil.load
 import com.google.android.material.snackbar.Snackbar
@@ -21,13 +22,10 @@ import javax.inject.Inject
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
 
-    @Inject
-    lateinit var productService: ProductsService
-
-    @Inject
-    lateinit var productMapper: ProductMapper
-
     private lateinit var binding: ActivityMainBinding
+    private val viewModel: MainActivityViewModel by lazy {
+        ViewModelProvider(this)[MainActivityViewModel::class.java]
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -36,29 +34,38 @@ class MainActivity : AppCompatActivity() {
         val controller = ProductEpoxyController()
         binding.epoxyRecyclerView.setController(controller)
         controller.setData(emptyList())
-        lifecycleScope.launchWhenStarted {
-            val response: Response<List<NetworkProduct>> = productService.getAllProducts()
-            val domainProducts: List<Product> = response.body()?.map {
-                productMapper.buildFrom(networkProduct = it)
-            } ?: emptyList()
-            controller.setData(domainProducts)
-            if (domainProducts.isEmpty()) {
+
+        viewModel.productsLiveData.observe(this) { products ->
+            controller.setData(products)
+            if (products.isEmpty()) {
                 Snackbar.make(binding.root, "Failed to fetch", Snackbar.LENGTH_LONG).show()
             }
         }
+        viewModel.refreshProducts()
+
     }
 
     private fun setupListeners() {
-            /*binding.cardView.setOnClickListener {
-                binding.productDescriptionTextView.apply {
-                    isVisible = !isVisible
-                }
-    @@ -70,6 +67,6 @@ class MainActivity : AppCompatActivity() {
-                }
-                binding.favoriteImageView.setIconResource(imageRes)
-                isFavorite = !isFavorite
-            }
-            }*/
+        /*binding.cardView.setOnClickListener {
+         binding.productDescriptionTextView.apply {
+             isVisible = !isVisible
+         }
+     }
+     binding.addToCartButton.setOnClickListener {
+         binding.inCartView.apply {
+             isVisible = !isVisible
+         }
+     }
+     var isFavorite = false
+     binding.favoriteImageView.setOnClickListener {
+         val imageRes = if (isFavorite) {
+             R.drawable.ic_round_favorite_border_24
+         } else {
+             R.drawable.ic_round_favorite_24
+         }
+         binding.favoriteImageView.setIconResource(imageRes)
+         isFavorite = !isFavorite
+     }*/
         }
 
 }
