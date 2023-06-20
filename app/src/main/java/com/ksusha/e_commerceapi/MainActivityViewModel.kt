@@ -1,25 +1,27 @@
 package com.ksusha.e_commerceapi
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.ksusha.e_commerceapi.model.domain.Product
+import com.ksusha.e_commerceapi.redux.ApplicationState
+import com.ksusha.e_commerceapi.redux.Store
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
 class MainActivityViewModel @Inject constructor(
-    private val productsRepository: ProductsRepository
+    private val productsRepository: ProductsRepository,
+    val store: Store<ApplicationState>
 ): ViewModel() {
 
-    private val _productLiveData = MutableLiveData<List<Product>>()
-    val productsLiveData: LiveData<List<Product>> = _productLiveData
-
     fun refreshProducts() = viewModelScope.launch {
-        val products = productsRepository.fetchAllProducts()
-        _productLiveData.value = products
+        val products: List<Product> = productsRepository.fetchAllProducts()
+        store.update { applicationState ->
+            return@update applicationState.copy(
+                products = products
+            )
+        }
     }
 
 }
