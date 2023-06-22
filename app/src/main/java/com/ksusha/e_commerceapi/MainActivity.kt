@@ -2,25 +2,15 @@ package com.ksusha.e_commerceapi
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.util.Log
-import androidx.core.view.isGone
-import androidx.core.view.isVisible
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.asLiveData
-import androidx.lifecycle.lifecycleScope
-import coil.load
-import com.google.android.material.snackbar.Snackbar
 import com.ksusha.e_commerceapi.databinding.ActivityMainBinding
-import com.ksusha.e_commerceapi.di.service.ProductsService
-import com.ksusha.e_commerceapi.epoxy.ProductEpoxyController
-import com.ksusha.e_commerceapi.model.domain.Product
-import com.ksusha.e_commerceapi.model.mapper.ProductMapper
-import com.ksusha.e_commerceapi.model.network.NetworkProduct
+import com.ksusha.e_commerceapi.epoxy.UiProductEpoxyController
+import com.ksusha.e_commerceapi.model.ui.UIProduct
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.map
-import retrofit2.Response
-import javax.inject.Inject
 
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
@@ -34,15 +24,21 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        val controller = ProductEpoxyController()
+        val controller = UiProductEpoxyController()
         binding.epoxyRecyclerView.setController(controller)
         controller.setData(emptyList())
 
-        viewModel.store.stateFlow.map { applicationState ->
-            applicationState.products
-        }.distinctUntilChanged().asLiveData().observe(this) { products ->
-            controller.setData(products)
+        combine(
+            viewModel.store.stateFlow.map { it.products },
+            viewModel.store.stateFlow.map { it.favouriteProductsId }
+        ) { listOfProducts, setOfFavoriteIds ->
+            listOfProducts.map { product ->
+                UIProduct(product = product, isFavourite = setOfFavoriteIds.contains(product.id))
+            }
+        }.distinctUntilChanged().asLiveData().observe(this) { uiProducts ->
+            controller.setData(uiProducts)
         }
+
         viewModel.refreshProducts()
 
     }

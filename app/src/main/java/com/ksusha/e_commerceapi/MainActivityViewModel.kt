@@ -6,6 +6,7 @@ import com.ksusha.e_commerceapi.model.domain.Product
 import com.ksusha.e_commerceapi.redux.ApplicationState
 import com.ksusha.e_commerceapi.redux.Store
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -21,6 +22,10 @@ class MainActivityViewModel @Inject constructor(
             return@update applicationState.copy(
                 products = products
             )
+        }
+        delay(5000)
+        store.update { applicationState ->
+            return@update applicationState.copy(favouriteProductsId = setOf(1, 2, 4))
         }
     }
 
