@@ -23,10 +23,6 @@ class MainActivityViewModel @Inject constructor(
                 products = products
             )
         }
-        delay(5000)
-        store.update { applicationState ->
-            return@update applicationState.copy(favouriteProductsId = setOf(1, 2, 4))
-        }
     }
 
 }

@@ -10,7 +10,8 @@ import com.ksusha.e_commerceapi.model.ui.UIProduct
 import java.text.NumberFormat
 
 data class UiProductEpoxyModel(
-    val uiProduct: UIProduct?
+    val uiProduct: UIProduct?,
+    val onFavouriteIconClicked: (Int) -> Unit
 ) : ViewBindingKotlinModel<EpoxyModelProductItemBinding>(R.layout.epoxy_model_product_item) {
 
     private val currencyFormatter = NumberFormat.getCurrencyInstance()
@@ -31,6 +32,10 @@ data class UiProductEpoxyModel(
                 R.drawable.ic_round_favorite_border_24
             }
             favoriteImageView.setIconResource(imageRes)
+
+            favoriteImageView.setOnClickListener {
+                onFavouriteIconClicked(uiProduct.product.id)
+            }
 
             productImageViewLoadingProgressBar.isVisible = true
             productImageView.load(data = uiProduct.product.image) {
