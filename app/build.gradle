@@ -74,4 +74,8 @@ dependencies {
     // Facebook shimmer
     implementation 'com.facebook.shimmer:shimmer:0.5.0'
 
+    // Jetpack Navigation
+    implementation "androidx.navigation:navigation-fragment-ktx:2.5.0"
+    implementation "androidx.navigation:navigation-ui-ktx:2.5.0"
+
 }

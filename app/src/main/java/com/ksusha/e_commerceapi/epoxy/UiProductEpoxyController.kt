@@ -2,12 +2,12 @@ package com.ksusha.e_commerceapi.epoxy
 
 import androidx.lifecycle.viewModelScope
 import com.airbnb.epoxy.TypedEpoxyController
-import com.ksusha.e_commerceapi.MainActivityViewModel
+import com.ksusha.e_commerceapi.fragment.list.ProductsListViewModel
 import com.ksusha.e_commerceapi.model.ui.UIProduct
 import kotlinx.coroutines.launch
 
 class UiProductEpoxyController(
-    private val viewModel: MainActivityViewModel
+    private val viewModel: ProductsListViewModel
 ): TypedEpoxyController<List<UIProduct>>() {
 
     override fun buildModels(data: List<UIProduct>?) {
