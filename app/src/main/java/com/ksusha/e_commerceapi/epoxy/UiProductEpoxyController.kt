@@ -1,17 +1,21 @@
 package com.ksusha.e_commerceapi.epoxy
 
 import androidx.lifecycle.viewModelScope
+import com.airbnb.epoxy.CarouselModel_
 import com.airbnb.epoxy.TypedEpoxyController
+import com.ksusha.e_commerceapi.ProductsListFragmentUiState
+import com.ksusha.e_commerceapi.epoxy.filter.UiProductFilterEpoxyModel
 import com.ksusha.e_commerceapi.fragment.list.ProductsListViewModel
+import com.ksusha.e_commerceapi.model.domain.Filter
 import com.ksusha.e_commerceapi.model.ui.UIProduct
 import kotlinx.coroutines.launch
 
 class UiProductEpoxyController(
     private val viewModel: ProductsListViewModel
-): TypedEpoxyController<List<UIProduct>>() {
+): TypedEpoxyController<ProductsListFragmentUiState>() {
 
-    override fun buildModels(data: List<UIProduct>?) {
-        if (data.isNullOrEmpty()) {
+    override fun buildModels(data: ProductsListFragmentUiState?) {
+        if (data == null) {
             repeat(7) {
                 val epoxyId = it + 1
                 UiProductEpoxyModel(
@@ -23,12 +27,34 @@ class UiProductEpoxyController(
             return
         }
 
-        data.forEach { uiProduct ->
+        val uiFilterModels = data.filters.map { uiFilter ->
+            UiProductFilterEpoxyModel(uiFilter = uiFilter, onFilterSelected = ::onFilterSelected).id(uiFilter.filter.value)
+        }
+        CarouselModel_().models(uiFilterModels).id("filters").addTo(this)
+
+        data.products.forEach { uiProduct ->
             UiProductEpoxyModel(
                 uiProduct = uiProduct,
                 onFavouriteIconClicked = ::onFavouriteIconClicked,
                 onUiProductClicked = ::onUiProductClicked
             ).id(uiProduct.product.id).addTo(this)
+        }
+    }
+
+    private fun onFilterSelected(filter: Filter) {
+        viewModel.viewModelScope.launch {
+            viewModel.store.update { currentState ->
+                val currentlySelectedFilter = currentState.productFilterInfo.selectedFilter
+                return@update currentState.copy(
+                    productFilterInfo = currentState.productFilterInfo.copy(
+                        selectedFilter = if (currentlySelectedFilter != filter) {
+                            filter
+                        } else {
+                            null
+                        }
+                    )
+                )
+            }
         }
     }
 
@@ -59,5 +85,6 @@ class UiProductEpoxyController(
             }
         }
     }
+
 
 }
