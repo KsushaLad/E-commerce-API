@@ -8,6 +8,7 @@ import androidx.navigation.ui.NavigationUI
 import com.ksusha.e_commerceapi.databinding.ActivityMainBinding
 import dagger.hilt.android.AndroidEntryPoint
 import androidx.navigation.ui.setupActionBarWithNavController
+import com.airbnb.epoxy.Carousel
 
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
@@ -31,6 +32,9 @@ class MainActivity : AppCompatActivity() {
         setupActionBarWithNavController(navController, appBarConfiguration)
 
         NavigationUI.setupWithNavController(binding.bottomNavigationView, navController)
+
+        Carousel.setDefaultGlobalSnapHelperFactory(null)
+
     }
 
 }

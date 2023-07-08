@@ -8,13 +8,13 @@
 
     <fragment
         android:id="@+id/productsListFragment"
-        android:name="com.ksusha.e_commerceapi.fragment.list.ProductsListFragment"
+        android:name="com.ksusha.e_commerceapi.fragment.home.list.ProductsListFragment"
         android:label="All Products"
         tools:layout="@layout/fragment_products_list"/>
 
     <fragment
         android:id="@+id/profileFragment"
-        android:name="com.ksusha.e_commerceapi.fragment.profile.ProfileFragment"
+        android:name="com.ksusha.e_commerceapi.fragment.home.profile.ProfileFragment"
         android:label="Profile"
         tools:layout="@layout/fragment_profile" />
 

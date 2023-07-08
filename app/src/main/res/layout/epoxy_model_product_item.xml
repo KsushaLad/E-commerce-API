@@ -4,6 +4,10 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:clipChildren="false"
+    android:clipToPadding="false"
+    android:paddingHorizontal="16dp"
+    android:paddingVertical="4dp"
     tools:context=".MainActivity">
 
     <com.google.android.material.card.MaterialCardView
@@ -12,7 +16,7 @@
         android:layout_height="150dp"
         app:cardBackgroundColor="@color/white"
         app:cardCornerRadius="@dimen/corner_radius"
-        app:cardElevation="12dp"
+        app:cardElevation="8dp"
         app:layout_constraintBottom_toTopOf="@id/productDescriptionTextView"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
