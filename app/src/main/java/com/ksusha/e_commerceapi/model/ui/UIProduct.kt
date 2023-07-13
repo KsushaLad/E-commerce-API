@@ -6,4 +6,5 @@ data class UIProduct(
     val product: Product,
     val isFavourite: Boolean = false,
     val isExpanded: Boolean = false,
+    val isInCart: Boolean = false
 )

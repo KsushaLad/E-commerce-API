@@ -18,4 +18,10 @@
         android:label="Profile"
         tools:layout="@layout/fragment_profile" />
 
+    <fragment
+        android:id="@+id/cartFragment"
+        android:name="com.ksusha.e_commerceapi.fragment.home.cart.CartFragment"
+        android:label="Your cart"
+        tools:layout="@layout/fragment_cart" />
+
 </navigation>
