@@ -10,7 +10,6 @@ import androidx.lifecycle.asLiveData
 import com.ksusha.e_commerceapi.databinding.FragmentProductsListBinding
 import com.ksusha.e_commerceapi.epoxy.UiProductEpoxyController
 import com.ksusha.e_commerceapi.model.ui.UIFilter
-import com.ksusha.e_commerceapi.model.ui.UIProduct
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.distinctUntilChanged
@@ -38,25 +37,13 @@ class ProductsListFragment: Fragment() {
 
         val controller = UiProductEpoxyController(viewModel)
         binding.epoxyRecyclerView.setController(controller)
-        //controller.setData(emptyList())
 
         combine(
-            viewModel.store.stateFlow.map { it.products },
-            viewModel.store.stateFlow.map { it.favouriteProductsId },
-            viewModel.store.stateFlow.map { it.expandedProductsId },
+            viewModel.uiProductListReducer.reduce(viewModel.store),
             viewModel.store.stateFlow.map { it.productFilterInfo },
-            viewModel.store.stateFlow.map { it.inCartProductsId }
-        ) { listOfProducts, setOfFavoriteIds, setOfExpandedIds, productFilterInfo, inCartProductIds ->
-            if (listOfProducts.isEmpty()) {
+        ) { uiProducts, productFilterInfo ->
+            if (uiProducts.isEmpty()) {
                 return@combine ProductsListFragmentUiState.Loading
-            }
-            val uiProducts = listOfProducts.map { product ->
-                UIProduct(
-                    product = product,
-                    isFavourite = setOfFavoriteIds.contains(product.id),
-                    isExpanded = setOfExpandedIds.contains(product.id),
-                    isInCart = inCartProductIds.contains(product.id)
-                )
             }
 
             val uiFilters = productFilterInfo.filters.map { filter ->

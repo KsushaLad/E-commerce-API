@@ -7,6 +7,7 @@ import com.ksusha.e_commerceapi.model.domain.Filter
 import com.ksusha.e_commerceapi.model.domain.Product
 import com.ksusha.e_commerceapi.redux.ApplicationState
 import com.ksusha.e_commerceapi.redux.Store
+import com.ksusha.e_commerceapi.redux.reducer.UiProductListReducer
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -14,6 +15,7 @@ import javax.inject.Inject
 @HiltViewModel
 class ProductsListViewModel @Inject constructor(
     val store: Store<ApplicationState>,
+    val uiProductListReducer: UiProductListReducer,
     private val productsRepository: ProductsRepository,
     private val filterGenerator: FilterGenerator
 ) : ViewModel() {
