@@ -2,6 +2,7 @@ package com.ksusha.e_commerceapi
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import androidx.annotation.IdRes
 import androidx.lifecycle.asLiveData
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.AppBarConfiguration
@@ -16,7 +17,6 @@ import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.map
 import javax.inject.Inject
 
-//SHA1: 61:8B:0A:BE:2E:B8:19:C1:80:52:44:59:AA:C2:11:79:A1:84:8B:F6
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
 
@@ -53,6 +53,10 @@ class MainActivity : AppCompatActivity() {
                 isVisible = numberOfProductsInCart > 0
             }
         }
+    }
+
+    fun navigateToTab(@IdRes destinationId: Int) {
+        binding.bottomNavigationView.selectedItemId = destinationId
     }
 
 }

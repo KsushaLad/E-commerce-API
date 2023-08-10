@@ -7,6 +7,8 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.asLiveData
+import com.ksusha.e_commerceapi.MainActivity
+import com.ksusha.e_commerceapi.R
 import com.ksusha.e_commerceapi.databinding.FragmentCartBinding
 import com.ksusha.e_commerceapi.fragment.home.cart.epoxy.CartFragmentEpoxyController
 import com.ksusha.e_commerceapi.model.ui.UIProduct
@@ -32,7 +34,9 @@ class CartFragment: Fragment() {
     }
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        val epoxyController = CartFragmentEpoxyController()
+        val epoxyController = CartFragmentEpoxyController(viewModel, onEmptyStateClicked = {
+            (activity as? MainActivity)?.navigateToTab(R.id.productsListFragment)
+        })
         binding.epoxyRecyclerView.setController(epoxyController)
 
         viewModel.uiProductListReducer.reduce(store = viewModel.store).map { uiProducts ->
